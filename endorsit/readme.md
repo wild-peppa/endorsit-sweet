@@ -17,6 +17,5 @@
 ```
 
 In endorsit/ directory, use **`python setup.py install`**<br>
-In endorsit/endorsit/ directory,
-For the first time, you should use **`python endorsit.py db init`**<br>
-Since then use **`python endorsit.py db migrate`** and  **`python endorsit.py db upgrade`**
+For the first time, you should use **`python manage.py db init`**<br>
+Since then use **`python manage.py db migrate`** and  **`python manage.py db upgrade`**
