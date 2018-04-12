@@ -4,7 +4,7 @@ from .code import Code
 
 
 class ServiceError(Exception):
-    status = 'error'
+    status = False
 
     # 自己定义了一个 return_code，作为更细颗粒度的错误代码
     def __init__(self, error_code=None, payload=None):

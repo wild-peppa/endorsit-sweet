@@ -41,9 +41,7 @@ def query_user():
 @user_api.route("/queryUsers", methods=["GET"])
 def query_users():
     users = User.query.all()
-    print(users)
     output = users_schema.dump(users).data
-    print(output)
     return success_response(output)
 
 
