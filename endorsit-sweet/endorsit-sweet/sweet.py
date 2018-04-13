@@ -41,9 +41,9 @@ def claim():
     return render_template('claim.html')
 
 
-@app.route('/user')
+@app.route('/activity')
 def user():
-    return render_template('user.html')
+    return render_template('activity.html')
 
 
 # register self-error-handler
