@@ -1,3 +1,4 @@
+from config.base import configs
 from endorsit.exceptions.custom_error import ServiceError
 from endorsit.plugins.plugins import db, ma
 from flask import Flask, render_template
@@ -5,14 +6,12 @@ from flask import jsonify
 from flask_cors import CORS
 from gevent import monkey
 from gevent import pywsgi
+from logger.logger import record_exception, debug_logger
+from views.user.views import user_api
 from werkzeug.debug import DebuggedApplication
 from werkzeug.serving import run_with_reloader
 
-from config.base import configs
-from logger.logger import record_exception, debug_logger
-from views.user.views import user_api
-
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='')
 monkey.patch_all()
 
 
