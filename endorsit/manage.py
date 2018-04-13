@@ -10,14 +10,14 @@
 #
 # if __name__ == '__main__':
 #     app.run()
+from endorsit.config.base import DefaultConfig
+from endorsit.models.settings import Settings
 from endorsit.models.users import User
+from endorsit.models.validator import Validator
+from endorsit.plugins.plugins import db
 from flask import Flask
 from flask_migrate import MigrateCommand, Migrate
 from flask_script import Manager, Server
-
-from endorsit.plugins.plugins import db
-
-from endorsit.config.base import DefaultConfig
 
 app = Flask(__name__)
 # 加载配置集合
@@ -34,7 +34,9 @@ manager.add_command("db", MigrateCommand)
 def make_shell_context():
     return dict(app=app,
                 db=db,
-                User=User)
+                User=User,
+                Settings=Settings,
+                Validator=Validator)
 
 
 if __name__ == '__main__':

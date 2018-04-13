@@ -1,8 +1,11 @@
+from datetime import datetime
+
 from ..plugins.plugins import db, ma
 
 
 class Settings(db.Model):
     __tablename__ = 'settings'
+    id = db.Column(db.Integer, primary_key=True)
 
     logo = db.Column(db.String(100), default='')
     logo_link = db.Column(db.String(200), default='')
@@ -41,6 +44,9 @@ class Settings(db.Model):
     extract_token_tip = db.Column(db.String(500), default='')
 
     is_ended = db.Column(db.Boolean, default=False)
+
+    create_at = db.Column(db.DateTime, default=datetime.now(), nullable=False)
+    update_at = db.Column(db.DateTime, default=datetime.now(), nullable=False)
 
     def __init__(self,
                  logo='',
@@ -95,11 +101,11 @@ class Settings(db.Model):
         self.is_ended = is_ended
 
 
-class SettingSchema(ma.ModelSchema):
+class SettingsSchema(ma.ModelSchema):
     class Meta:
         model = Settings
 
 
-setting_schema = SettingSchema()
+setting_schema = SettingsSchema()
 
-settings_schema = SettingSchema(many=True)
+settings_schema = SettingsSchema(many=True)

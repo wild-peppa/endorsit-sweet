@@ -1,4 +1,5 @@
 from endorsit.exceptions.custom_error import ServiceError
+from endorsit.models.settings import Settings, setting_schema
 from endorsit.models.users import User, users_schema, user_schema
 from endorsit.plugins.plugins import db
 from endorsit.response.utils import success_response
@@ -53,3 +54,14 @@ def update():
         db.session.commit()
         return success_response('Update success')
     return success_response('No data')
+
+
+## return settings
+
+
+@user_api.route("/settings", methods=["GET"])
+def settings():
+    settings = db.session.query(Settings).first()
+    del settings.ended_digest
+    output = setting_schema.dump(settings).data
+    return success_response(output)
