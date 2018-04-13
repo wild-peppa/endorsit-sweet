@@ -8,7 +8,7 @@ from gevent import pywsgi
 
 from config.base import configs
 from logger.logger import record_exception, debug_logger
-from user.views import user_api
+from views.user.views import user_api
 
 app = Flask(__name__)
 monkey.patch_all()
@@ -34,6 +34,16 @@ def create_app(config_name):
 @app.route('/')
 def default():
     return render_template('index.html')
+
+
+@app.route('/claim')
+def claim():
+    return render_template('claim.html')
+
+
+@app.route('/user')
+def user():
+    return render_template('user.html')
 
 
 # register self-error-handler
