@@ -52,7 +52,7 @@ def user():
 @record_exception
 def handle_invalid_usage(error):
     response = jsonify(error.to_dict())
-    response.status = error.status
+    print(error.to_dict())
     return response
 
 

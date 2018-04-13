@@ -1,8 +1,12 @@
+import random
+
 from endorsit.exceptions.custom_error import ServiceError
 from endorsit.models.settings import Settings, setting_schema
 from endorsit.models.users import User, users_schema, user_schema
+from endorsit.models.validator import Validator
 from endorsit.plugins.plugins import db
 from endorsit.response.utils import success_response
+from endorsit.utils.request import get_data_from_request
 # from user import user_api
 from flask import Blueprint, request
 from sqlalchemy.exc import ProgrammingError, IntegrityError
@@ -35,15 +39,19 @@ def insert_user():
 def query_user():
     name = request.args.get('name')
     user = User.query.filter_by(name=name).first()
-    output = user_schema.dump(user).data
-    return success_response(output)
+    if user:
+        output = user_schema.dump(user).data
+        return success_response(output)
+    raise ServiceError(200000)
 
 
 @user_api.route("/queryUsers", methods=["GET"])
 def query_users():
     users = User.query.all()
-    output = users_schema.dump(users).data
-    return success_response(output)
+    if users:
+        output = users_schema.dump(users).data
+        return success_response(output)
+    raise ServiceError(200000)
 
 
 @user_api.route("/update", methods=["GET"])
@@ -53,15 +61,66 @@ def update():
         user.name = 'update2'
         db.session.commit()
         return success_response('Update success')
-    return success_response('No data')
+    raise ServiceError(200000)
 
 
-## return settings
-
-
+# return settings
 @user_api.route("/settings", methods=["GET"])
 def settings():
-    settings = db.session.query(Settings).first()
-    del settings.ended_digest
-    output = setting_schema.dump(settings).data
-    return success_response(output)
+    setting_result = db.session.query(Settings).first()
+    if setting_result:
+        # todo accroding to airdrop time to change digst's value
+        del setting_result.ended_digest
+        output = setting_schema.dump(setting_result).data
+        return success_response(output)
+    raise ServiceError(200000)
+
+
+# validate mail code exist?code:newcode
+@user_api.route("/code", methods=["POST"])
+def code():
+    data = get_data_from_request(request)
+    print(data)
+    if 'input_content' not in data.keys() or not data['input_content']:
+        raise ServiceError(100001)
+    old_validator = Validator.query.filter_by(input_content=data['input_content']).first()
+    if old_validator:
+        return success_response(old_validator.code)
+
+    new_code = ''.join(random.sample('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789', 8))
+    try:
+        validator = Validator(
+            team_id=int(data['team_id']),
+            settings_id=int(data['settings_id']),
+            input_content=data['input_content'],
+            code=new_code
+        )
+    except Exception:
+        raise ServiceError(100001)
+
+    '''
+    query with condition(team_id, from_code), (exist and !bind)?do:notdo
+    '''
+    if 'from_code' in data.keys():
+        from_validator = Validator.query.filter_by(team_id=int(data['team_id']),
+                                                   code=data['from_code']).first()
+        if from_validator and from_validator.is_bind == False:
+            validator.from_code = data['from_code']
+            validator.is_bind = True
+    db.session.add(validator)
+    db.session.commit()
+    return success_response(new_code)
+
+
+@user_api.route("/earn", methods=["GET"])
+def earn():
+    code_arg = request.args.get('code')
+    validator = Validator.query.filter_by(code=code_arg).first()
+    if not validator:
+        raise ServiceError(200003)
+
+    data = {}
+    data['earned'] = validator.earned
+    data['invited'] = validator.invited_count
+
+    return success_response(data)
