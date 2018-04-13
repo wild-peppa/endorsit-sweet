@@ -1,6 +1,6 @@
 from endorsit.exceptions.custom_error import ServiceError
 from endorsit.plugins.plugins import db, ma
-from flask import Flask
+from flask import Flask, render_template
 from flask import jsonify
 from flask_cors import CORS
 from gevent import monkey
@@ -30,6 +30,12 @@ def create_app(config_name):
     return app
 
 
+# default page
+@app.route('/')
+def default():
+    return render_template('index.html')
+
+
 # register self-error-handler
 @app.errorhandler(ServiceError)
 @record_exception
@@ -50,8 +56,10 @@ def handle_invalid_usage(error):
 
 if __name__ == '__main__':
     # run_debug_mode()
-
-    application = create_app('default')
-    server = pywsgi.WSGIServer(('', 5000), application)
-    debug_logger.info("server started...")
-    server.serve_forever()
+    try:
+        application = create_app('default')
+        server = pywsgi.WSGIServer(('', 5000), application)
+        debug_logger.info("server started...")
+        server.serve_forever()
+    except KeyboardInterrupt:
+        pass
