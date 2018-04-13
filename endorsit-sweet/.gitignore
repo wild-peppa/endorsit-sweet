@@ -1,3 +1,7 @@
+#logs
+debug.log
+error.log
+
 #IDEA
 .idea/
 
