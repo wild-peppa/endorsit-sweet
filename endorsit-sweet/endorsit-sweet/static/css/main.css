@@ -1,0 +1,116 @@
+html, body {
+    width: 100%;
+    height: 100%;
+    color: white;
+}
+
+.hidden {
+    display: none
+}
+
+#layout-menu {
+    width: 50px;
+    height: 50px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    position: fixed;
+    left: 1em;
+    bottom: 1em;
+    line-height: 50px;
+    text-align: center;
+    border-radius: 0.3em;
+    z-index: 9999;
+}
+
+#layout-menu i {
+    font-weight: bolder;
+    font-size: 1.7em;
+}
+
+.layui-layout-body .layui-layout .layui-header .layui-logo i {
+    font-size: 1.5em;
+}
+
+.layui-layout-body .layui-layout .layui-header .layui-logo-mobile {
+    width: 6em;
+}
+
+.layui-body {
+    padding: 15px;
+}
+
+.layui-layout-body .layui-layout .layui-side  {
+    z-index: 10000;
+}
+
+.layui-layout-body .layui-layout .layui-side-no-top {
+    top: 0;
+}
+
+#layout-shade {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+    position: fixed;
+    top: 0;
+    z-index: 9999;
+    color: transparent;
+}
+
+.layui-layout-body .layui-layout .full-body {
+    left: 0;
+}
+
+.layui-layout-body {
+    overflow: auto;
+}
+
+.layui-container {
+    margin-top: 15px;
+    margin-bottom: 50px;
+}
+
+.switch-language {
+    overflow: hidden;
+}
+
+.switch-language button {
+    float: right;
+}
+
+.logo {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.logo a {
+    width: 120px;
+    height: 120px;
+    display: inline-block;
+}
+
+.logo a img {
+    display: block;
+    margin: auto auto;
+    width: 120px;
+    height: 120px;
+}
+
+.telegram {
+    color: white;
+    font-size: 18px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.telegram a {
+    color: #1E9FFF;
+    text-decoration: underline;
+}
+
+.digest {
+    width: 80%;
+    margin: auto;
+    margin-top: 20px;
+    font-size: 18px;
+}

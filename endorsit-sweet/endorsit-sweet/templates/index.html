@@ -1,20 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<form action="/user/insert" method="post">
-    <p><label>
-        <input name="name">
-    </label></p>
-    <p><label>
-        <input name="age">
-    </label></p>
-    <p>
-        <button type="submit">Sign In</button>
-    </p>
-</form>
-</body>
-</html>
+{% extends 'layout.html' %}
+{% block title %}{% endblock %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<script id="input-area-tpl" type="text/html">
+    <form id="sweform">
+        <div class="input-content">
+            <input id="input-content" type="text" name="title" placeholder="<% d %>" autocomplete="off" class="layui-input">
+        </div>
+        
+        <div class="submit">
+            <button type="submit" class="layui-btn layui-btn-normal layui-btn-fluid submit-btn">SUBMIT</button>
+        </div>
+    </form>
+</script>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+
+<script>
+layui.use('home')
+</script>
+
+{% endblock %}

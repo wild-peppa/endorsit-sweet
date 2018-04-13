@@ -1,20 +1,85 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<form action="/user/insert" method="post">
-    <p><label>
-        <input name="name">
-    </label></p>
-    <p><label>
-        <input name="age">
-    </label></p>
-    <p>
-        <button type="submit">Sign In</button>
-    </p>
-</form>
-</body>
-</html>
+{% extends 'layout.html' %}
+
+{% block title %}{% endblock %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='/css/activity.css') }} ">
+{% endblock %}
+
+{% block content %}
+
+<script id="activity-area-tpl" type="text/html">
+    <div class="token">
+        <button class="layui-btn layui-btn-radius layui-btn-danger layui-btn-lg claim">提取 EXT（Claim EXT）</button>
+    </div>
+
+    <div class="invite">
+        <div class="invite-desc">
+            <%# if (!d.is_ended) { %>
+                <% d.step1_desc %>
+            <%# } else { %>
+                <% d.ended_step1_desc %>
+            <%# } %>
+        </div>
+        <div class="invite-container">
+            <div id="invite-text-code" class="invite-text">
+
+                <%#  if (d.is_iphone) { %> 
+                    <div id="copy-code" class="copy-value-box"><% d.code %></div>
+                <%#  } else { %> 
+                    <input id="copy-code" class="copy-value-box" readonly type="text" value="<% d.code %>" />
+                <%#  } %>     
+
+            </div>
+            <button id="copy-invite-code" class="copy-btn">COPY</button>
+        </div>
+    </div>
+    
+    <div class="invite">
+        <div class="invite-desc">
+
+            <%# if (!d.is_ended) { %>
+                <% d.step2_desc %>
+            <%# } else { %>
+                <% d.ended_step2_desc %>
+            <%# } %>
+        </div>
+
+        <div class="invite-container">
+            <div id="invite-text-link" class="invite-text">
+    
+                <%#  if (d.is_iphone) { %> 
+                    <div id="copy-link" class="copy-value-box"><% d.share_link %></div>
+                <%#  } else { %> 
+                    <input id="copy-link" class="copy-value-box" readonly type="text" value="<% d.share_link %>" />
+                <%#  } %>     
+
+            </div>
+            <button id="copy-invite-link" class="copy-btn">COPY</button>
+        </div>
+    </div>
+    
+    <div class="result">
+        <div class="result-invited">
+            <div class="result-invited-text"><% d.result1_desc %></div>
+            <div class="result-invited-number"><% d.invited_count %></div>
+        </div>
+ 
+        <div class="result-ext">
+            <div class="result-ext-text"><% d.result2_desc %></div>
+            <div class="result-ext-number"><% d.earned %></div>
+        </div>
+    </div>
+</script>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+
+<script>
+    layui.use('activity')
+</script>
+
+{% endblock %}
