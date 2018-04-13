@@ -5,6 +5,7 @@ from flask import jsonify
 from flask_cors import CORS
 from gevent import monkey
 from gevent import pywsgi
+from werkzeug.debug import DebuggedApplication
 from werkzeug.serving import run_with_reloader
 
 from config.base import configs
@@ -57,20 +58,22 @@ def handle_invalid_usage(error):
 
 
 # run debug mode
-# @run_with_reloader
-# def run_debug_mode():
-#     debug = create_app('default')
-#     debug_server = pywsgi.WSGIServer(('', 5000), DebuggedApplication(debug))
-#     debug_logger.info("server debuged...")
-#     debug_server.serve_forever()
+@run_with_reloader
+def run_debug_mode():
+    debug = create_app('default')
+    debug_server = pywsgi.WSGIServer(('', 5000), DebuggedApplication(debug))
+    debug_logger.info("server debuged...")
+    debug_server.serve_forever()
 
 
 if __name__ == '__main__':
     try:
-        # run_debug_mode()
-        application = create_app('default')
-        server = pywsgi.WSGIServer(('', 5000), application)
-        debug_logger.info("server started...")
-        server.serve_forever()
+        run_debug_mode()
+        # application = create_app('default')
+        # server = pywsgi.WSGIServer(('', 5000), application)
+        # debug_logger.info("server started...")
+        # server.serve_forever()
     except KeyboardInterrupt:
+        pass
+    except TypeError:
         pass
