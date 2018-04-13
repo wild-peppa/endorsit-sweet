@@ -5,6 +5,7 @@ from flask import jsonify
 from flask_cors import CORS
 from gevent import monkey
 from gevent import pywsgi
+from werkzeug.serving import run_with_reloader
 
 from config.base import configs
 from logger.logger import record_exception, debug_logger
@@ -65,8 +66,8 @@ def handle_invalid_usage(error):
 
 
 if __name__ == '__main__':
-    # run_debug_mode()
     try:
+        # run_debug_mode()
         application = create_app('default')
         server = pywsgi.WSGIServer(('', 5000), application)
         debug_logger.info("server started...")
