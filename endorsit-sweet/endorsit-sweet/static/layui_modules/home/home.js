@@ -1,32 +1,34 @@
-layui.define(['laytpl', 'base', 'home_http'], function(exports) {
+layui.define(['laytpl', 'base'], function (exports) {
     var $ = layui.jquery
-    ,http = layui.home_http
-  ,laytpl = layui.laytpl
-
+        , laytpl = layui.laytpl
     // **** init data **** {
-    var init_input_area = function(data) {
+    var init_input_area = function (data) {
         var tpl = $('#input-area-tpl').html()
-        laytpl(tpl).render(data, function(html) {
+        laytpl(tpl).render(data, function (html) {
             $('#layout-body').html(html)
         })
     }
+    settings = JSON.parse(localStorage.getItem('settings'))
 
-    init_input_area({
-        '': ''
-    })
+    init_input_area(settings.input_content_tip)
 
     // }
 
     // **** init buttons **** {
 
-    $('#sweform').on('submit', function(e) {
+    $('#sweform').on('submit', function (e) {
         e.preventDefault()
         buttonChange($(this).find('button'), false)
         var input_content = $('#input-content').val().trim()
+        var emailReg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$");
         if (input_content == '') {
             layer.msg('fill the input box please')
             buttonChange($(this).find('button'), true)
             return false
+        } else if (!emailReg.test(input_content)) { //正则验证不通过，格式不对
+            layer.msg('fill the input box please')
+            buttonChange($(this).find('button'), true)
+            return false;
         }
 
         var settings = localStorage.getItem('settings')
@@ -52,25 +54,32 @@ layui.define(['laytpl', 'base', 'home_http'], function(exports) {
         if (from_code != null && from_code != '') {
             data.from_code = from_code
         }
-
-        http.post_content(data, function(response) {
-            localStorage.setItem('code', response.code)
-            location.href = '/' + localStorage.getItem('symbol')+ '/steps'
+        $.ajax({
+            type: 'post',
+            url: window.location.href + '/user/code',
+            data: data,
+            success: function(res) {
+                $('#sweform button').text('SUBMIT')
+                $('#sweform button').prop('disabled', false)
+                $('#sweform button').removeClass('layui-btn-disabled')
+                localStorage.setItem('code', res.data)
+                location.href = '/activity'
+            }
         })
     })
 
     // }
     function buttonChange(obj, flag) {
-        if(flag == false) {
+        if (flag == false) {
             $(obj).text('Please Wait...')
             $(obj).prop('disabled', true)
             $(obj).addClass('layui-btn-disabled')
         }
-       else {
+        else {
             $(obj).text('SUBMIT')
             $(obj).prop('disabled', false)
             $(obj).removeClass('layui-btn-disabled')
-       }
+        }
     }
     exports('home', {})
 })

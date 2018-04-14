@@ -26,6 +26,7 @@ layui.define(['jquery', 'layer'], function(exports) {
                 } else {
                     layer.msg(response.msg)
                 }
+                console.log(1);
             } else {
                 if (utils.isFunc(exception)) {
                     exception(response)

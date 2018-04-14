@@ -1,41 +1,47 @@
-layui.define(['base', 'laytpl', 'activity_http'], function(exports) {
+layui.define(['base', 'laytpl'], function(exports) {
     var $ = layui.jquery
-   ,layer = layui.layer
-  ,laytpl = layui.laytpl
-    ,http = layui.activity_http
+    ,layer = layui.layer
+    ,laytpl = layui.laytpl
     ,base = layui.base
 
     laytpl.config({
         open: '<%',
         close: '%>'
     })
-
     storage = window.localStorage
-
     var code = storage.getItem('code')
+    var settings = storage.getItem('settings')
+    settings = JSON.parse(settings)
 
     if (code == '' || code == null) {
         storage.clear()
-        location.href = '/ext'
+        location.href = '/'
     }
-
-    // query settings
-    settings = {}
 
     var init_activity_area = function() {
         settings.code = '/' + code
-        settings.share_link = settings.share_link_domain + '/' + code
+        settings.share_link = window.location.origin + '/' + code
 
-        http.get_invite_info(storage.getItem('code'), function(response) {
-            settings.invited_count = response.invited
-            settings.earned = response.earned
-        }, function(response) {
-            settings.invited_count = 0
-            settings.earned = 0
+        $.ajax({
+            url: window.location.origin + '/user/earn',
+            type: 'get',
+            async: false,
+            data: {
+                'code': storage.getItem('code')
+            },
+            success: function(res) {
+                settings.invited_count = res.data.invited
+                settings.earned = res.data.earned
+            },
+            error: function() {
+                settings.invited_count = 0
+                settings.earned = 0
+            }
         })
 
-        var agent = window.navigator.userAgent.toLowerCase()
 
+
+        var agent = window.navigator.userAgent.toLowerCase()
         if (agent.indexOf('mac') >= 0 || agent.indexOf('iphone') >= 0 || agent.indexOf('ipad') >= 0) {
             settings.is_iphone = true
         } else {
@@ -62,7 +68,7 @@ layui.define(['base', 'laytpl', 'activity_http'], function(exports) {
     }
 
     $('.claim').click(function() {
-        location.href = '/ext/claim'
+        location.href = '/claim'
     })
     
     // } 

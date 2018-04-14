@@ -8,7 +8,7 @@ layui.define(['layer', 'jquery', 'base'], function(exports) {
         get_team: function(symbol, callback=null, exception=null) {
             $.ajax({
                 type: 'get',
-                url: base.apigen('/team/' + symbol),
+                url: base.apigen('/user/' + symbol),
                 async: false,
                 success: function(response) {
                     base.http_handler(response, callback, exception)
