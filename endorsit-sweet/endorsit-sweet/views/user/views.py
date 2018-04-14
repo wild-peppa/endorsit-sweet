@@ -70,7 +70,6 @@ def settings():
     setting_result = db.session.query(Settings).first()
     if setting_result:
         # todo accroding to airdrop time to change digst's value
-        del setting_result.ended_digest
         output = setting_schema.dump(setting_result).data
         return success_response(output)
     raise ServiceError(200000)

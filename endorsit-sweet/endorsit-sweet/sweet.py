@@ -1,4 +1,4 @@
-from config.base import configs
+from endorsit.config.base import configs
 from endorsit.exceptions.custom_error import ServiceError
 from endorsit.plugins.plugins import db, ma
 from flask import Flask, render_template
@@ -60,7 +60,7 @@ def handle_invalid_usage(error):
 @run_with_reloader
 def run_debug_mode():
     debug = create_app('default')
-    debug_server = pywsgi.WSGIServer(('', 5000), DebuggedApplication(debug))
+    debug_server = pywsgi.WSGIServer(('', 8001), DebuggedApplication(debug))
     debug_logger.info("server debuged...")
     debug_server.serve_forever()
 
@@ -69,7 +69,7 @@ if __name__ == '__main__':
     try:
         run_debug_mode()
         # application = create_app('default')
-        # server = pywsgi.WSGIServer(('', 5000), application)
+        # server = pywsgi.WSGIServer(('', 8001), application)
         # debug_logger.info("server started...")
         # server.serve_forever()
     except KeyboardInterrupt:
