@@ -33,7 +33,7 @@ def create_app(config_name):
 
 # default page
 @app.route('/', defaults={'code': None})
-@app.route('/<string:code>')
+@app.route('/from/<string:code>')
 def default(code):
     print(code)
     return render_template('index.html')
