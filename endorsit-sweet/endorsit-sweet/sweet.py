@@ -32,8 +32,10 @@ def create_app(config_name):
 
 
 # default page
-@app.route('/')
-def default():
+@app.route('/', defaults={'code': None})
+@app.route('/<string:code>')
+def default(code):
+    print(code)
     return render_template('index.html')
 
 
@@ -60,7 +62,7 @@ def handle_invalid_usage(error):
 @run_with_reloader
 def run_debug_mode():
     debug = create_app('default')
-    debug_server = pywsgi.WSGIServer(('', 8001), DebuggedApplication(debug))
+    debug_server = pywsgi.WSGIServer(('0.0.0.0', 8001), DebuggedApplication(debug))
     debug_logger.info("server debuged...")
     debug_server.serve_forever()
 
