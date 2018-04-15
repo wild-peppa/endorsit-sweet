@@ -22,8 +22,12 @@ layui.define(['element', 'laytpl', 'home_http'], function (exports) {
             url: window.location.origin + '/user/settings',
             async: false,
             success: function (res) {
-                init_home(res.data);
-                storage.setItem('settings', JSON.stringify(res.data))
+                
+                if(res.data) {
+                    storage.setItem('settings', JSON.stringify(res.data))
+                    init_home(res.data);
+                }
+                
             }
         })
     }()
