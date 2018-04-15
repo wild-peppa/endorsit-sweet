@@ -105,7 +105,6 @@ def code():
                                                    code=data['from_code']).first()
         if from_validator and from_validator.is_bind:
             validator.from_code = data['from_code']
-            validator.is_bind = True
     db.session.add(validator)
     db.session.commit()
     return success_response(new_code)
