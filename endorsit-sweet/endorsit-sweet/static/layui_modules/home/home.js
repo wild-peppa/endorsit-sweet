@@ -1,6 +1,11 @@
 layui.define(['laytpl', 'base'], function (exports) {
     var $ = layui.jquery
         , laytpl = layui.laytpl
+    
+    laytpl.config({
+        open: '<%',
+        close: '%>'
+    })
     // **** init data **** {
     var init_input_area = function (data) {
         var tpl = $('#input-area-tpl').html()
@@ -9,13 +14,11 @@ layui.define(['laytpl', 'base'], function (exports) {
         })
     }
     settings = JSON.parse(localStorage.getItem('settings'))
-
     init_input_area(settings.input_content_tip)
 
     // }
 
     // **** init buttons **** {
-
     $('#sweform').on('submit', function (e) {
         e.preventDefault()
         buttonChange($(this).find('button'), false)
@@ -43,8 +46,8 @@ layui.define(['laytpl', 'base'], function (exports) {
         var team_id = stgs.team_id
         var settings_id = stgs.id
 
-        var from_code = storage.getItem('from_code')
-
+        
+        var from_code = window.location.pathname.slice(1,)
         var data = {
             team_id: team_id,
             settings_id: settings_id,
@@ -56,7 +59,7 @@ layui.define(['laytpl', 'base'], function (exports) {
         }
         $.ajax({
             type: 'post',
-            url: window.location.href + '/user/code',
+            url: window.location.origin + '/user/code',
             data: data,
             success: function(res) {
                 $('#sweform button').text('SUBMIT')
