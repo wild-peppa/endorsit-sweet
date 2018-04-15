@@ -1,4 +1,4 @@
-FROM joit/flask-env-docker:0.0.1
+FROM eds-swt-env
 
 WORKDIR /root/endorsit-sweet
 
