@@ -80,7 +80,12 @@ def settings():
 def code():
     data = get_data_from_request(request)
     print(data)
-    if 'input_content' not in data.keys() or not data['input_content']:
+    if 'input_content' not in data.keys() \
+            or not data['input_content'] \
+            or 'team_id' not in data.keys() \
+            or not data['team_id'] \
+            or 'settings_id' not in data.keys() \
+            or not data['settings_id']:
         raise ServiceError(100001)
     old_validator = Validator.query.filter_by(input_content=data['input_content']).first()
     if old_validator:

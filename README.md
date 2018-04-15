@@ -1,1 +1,1 @@
-<h2>`The Project for endorsit-sweet`</h2>
+<h2>`The Project for endorsit-airdrop`</h2>

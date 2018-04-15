@@ -7,6 +7,7 @@ from flask_cors import CORS
 from gevent import monkey
 from gevent import pywsgi
 from logger.logger import record_exception, debug_logger
+from views.telegram.views import telegram
 from views.user.views import user_api
 from werkzeug.debug import DebuggedApplication
 from werkzeug.serving import run_with_reloader
@@ -21,6 +22,7 @@ def create_app(config_name):
 
     # register blueprints area
     app.register_blueprint(user_api, url_prefix='/user')
+    app.register_blueprint(telegram, url_prefix='/airdrop')
 
     # across domain
     CORS(app, supports_credentials=True)
