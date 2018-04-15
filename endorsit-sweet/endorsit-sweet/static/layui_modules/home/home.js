@@ -17,7 +17,6 @@ layui.define(['laytpl', 'base'], function (exports) {
     init_input_area(settings.input_content_tip)
 
     // }
-
     // **** init buttons **** {
     $('#sweform').on('submit', function (e) {
         e.preventDefault()
@@ -47,7 +46,8 @@ layui.define(['laytpl', 'base'], function (exports) {
         var settings_id = stgs.id
 
         
-        var from_code = window.location.pathname.slice(1,)
+        var tempArr = window.location.pathname.split("/")
+        var from_code = tempArr[tempArr.length - 1];
         var data = {
             team_id: team_id,
             settings_id: settings_id,

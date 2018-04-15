@@ -8,6 +8,7 @@ layui.define(['base', 'laytpl'], function(exports) {
         open: '<%',
         close: '%>'
     })
+    
     storage = window.localStorage
     var code = storage.getItem('code')
     var settings = storage.getItem('settings')
@@ -20,7 +21,7 @@ layui.define(['base', 'laytpl'], function(exports) {
 
     var init_activity_area = function() {
         settings.code = '/' + code
-        settings.share_link = window.location.origin + '/' + code
+        settings.share_link = window.location.origin + '/from' + '/' + code
 
         $.ajax({
             url: window.location.origin + '/user/earn',
