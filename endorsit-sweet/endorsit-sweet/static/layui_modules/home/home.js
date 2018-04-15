@@ -14,7 +14,22 @@ layui.define(['laytpl', 'base'], function (exports) {
         })
     }
     settings = JSON.parse(localStorage.getItem('settings'))
-    init_input_area(settings.input_content_tip)
+    if(settings != null) {
+        init_input_area(settings.input_content_tip)
+    }
+    else {
+        $.ajax({
+            type: 'get',
+            url: window.location.origin + '/user/settings',
+            async: false,
+            success: function (res) {
+                if(res.data) {
+                    window.localStorage.setItem('settings', JSON.stringify(res.data))
+                    init_input_area(res.data.input_content_tip)
+                }   
+            }
+        })
+    }
 
     // }
     // **** init buttons **** {
@@ -27,7 +42,7 @@ layui.define(['laytpl', 'base'], function (exports) {
             layer.msg('fill the input box please')
             buttonChange($(this).find('button'), true)
             return false
-        } else if (!emailReg.test(input_content)) { //正则验证不通过，格式不对
+        } else if (!emailReg.test(input_content)) { 
             layer.msg('fill the input box please')
             buttonChange($(this).find('button'), true)
             return false;
