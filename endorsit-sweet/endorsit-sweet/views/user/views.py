@@ -103,7 +103,7 @@ def code():
     if 'from_code' in data.keys():
         from_validator = Validator.query.filter_by(team_id=int(data['team_id']),
                                                    code=data['from_code']).first()
-        if from_validator and from_validator.is_bind == False:
+        if from_validator and from_validator.is_bind:
             validator.from_code = data['from_code']
             validator.is_bind = True
     db.session.add(validator)
