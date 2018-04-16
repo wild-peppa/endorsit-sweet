@@ -29,7 +29,7 @@ def validate_neo_addr(address):
 
 
 @telegram.route("/<string:token>", methods=["POST"])
-def airdrop(token):
+def airdrop(self, token):
     def post_telegram(url, chat_id, text, reply_to_message_id):
         r = requests.post(url,
                           headers={
@@ -49,7 +49,7 @@ def airdrop(token):
     # text for /code
     text = data['message']['text'] if 'text' in data['message'].keys() else ''
 
-    if not validate_neo_addr(text) and text != '/eds':
+    if not self.validate_neo_addr(text) and text != '/eds':
         print("validate_neo_addr %s and text is not /eds", text)
         return make_response('true')
 
@@ -77,10 +77,10 @@ def airdrop(token):
                    (('Hi, %s' % first_name) if first_name else 'Hi')) + ', '
 
     def reply(reply_content):
-        post_telegram(send_to,
-                      group_id,
-                      reply_content,
-                      message_id)
+        self.post_telegram(send_to,
+                           group_id,
+                           reply_content,
+                           message_id)
 
     check_duplicate_address = Validator.query.filter_by(neo_address=text).first()
     if check_duplicate_address:
@@ -133,7 +133,7 @@ def airdrop(token):
 
 
 @telegram.route('/telegrams/<string:token>', methods=['POST'])
-def telegrams(token):
+def telegrams(self, token):
     def post_telegram(url, chat_id, text, reply_to_message_id):
         r = requests.post(url,
                           headers={
@@ -154,7 +154,6 @@ def telegrams(token):
     text = data['message']['text'] if 'text' in data['message'].keys() else ''
 
     if text == '/eds':
-
         return make_response('true')
 
     # telegram info from data
@@ -188,10 +187,10 @@ def telegrams(token):
     code = text[1:len(text)]
 
     def reply(reply_content):
-        post_telegram(send_to,
-                      group_id,
-                      reply_content,
-                      message_id)
+        self.post_telegram(send_to,
+                           group_id,
+                           reply_content,
+                           message_id)
 
     # get bot info
     bot = Bot.query.filter_by(bot_token=token).first()
