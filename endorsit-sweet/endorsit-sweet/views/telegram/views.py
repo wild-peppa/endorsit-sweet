@@ -1,3 +1,5 @@
+from pprint import pprint
+
 import requests
 from base58 import b58decode
 from eggit.string import DateTimeUtils
@@ -10,11 +12,6 @@ from flask import Blueprint, request, json, make_response
 from neocore.UInt160 import UInt160
 
 telegram = Blueprint('telegram', __name__)
-
-
-@telegram.route("/", methods=["GET"])
-def index():
-    return 'HelloWorld'
 
 
 def validate_neo_addr(address):
@@ -45,14 +42,14 @@ def airdrop(token):
                           }).encode('utf-8'))
 
     data = get_data_from_request(request)
-
+    pprint(data)
     # replay telegram api
     send_to = 'https://api.telegram.org/bot%s/sendMessage' % token
 
     # text for /code
     text = data['message']['text'] if 'text' in data['message'].keys() else ''
 
-    if not validate_neo_addr(text) and text != '/ext':
+    if not validate_neo_addr(text) and text != '/eds':
         return make_response('true')
 
     # telegram info from data
@@ -92,7 +89,7 @@ def airdrop(token):
 
     validator = Validator.query.filter_by(bind_telegram_user_id=user_id).first()
 
-    if text == '/ext':
+    if text == '/eds':
         if validator and validator.is_bind and validator.earned:
             reply('邀请 %(invite)s 人\n获得 %(earned)s EDS\n\nInvite %(invite)s\nEarned %(earned)s EDS' % {
                 'invite': str(validator.invited_count),
@@ -150,7 +147,7 @@ def telegrams(token):
     # text for /code
     text = data['message']['text'] if 'text' in data['message'].keys() else ''
 
-    if text == '/ext':
+    if text == '/eds':
         return make_response('true')
 
     # telegram info from data

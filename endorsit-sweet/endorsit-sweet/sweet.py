@@ -73,7 +73,7 @@ if __name__ == '__main__':
     try:
         run_debug_mode()
         # application = create_app('default')
-        # server = pywsgi.WSGIServer(('', 8001), application)
+        # server = pywsgi.WSGIServer(('0.0.0.0', 8001), application)
         # debug_logger.info("server started...")
         # server.serve_forever()
     except KeyboardInterrupt:
