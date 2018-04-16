@@ -29,7 +29,7 @@ def validate_neo_addr(address):
 
 
 @telegram.route("/<string:token>", methods=["POST"])
-def airdrop(self, token):
+def airdrop(token):
     def post_telegram(url, chat_id, text, reply_to_message_id):
         r = requests.post(url,
                           headers={
@@ -50,7 +50,7 @@ def airdrop(self, token):
     # text for /code
     text = data['message']['text'] if 'text' in data['message'].keys() else ''
 
-    if not self.validate_neo_addr(text) and text != '/eds':
+    if not validate_neo_addr(text) and text != '/eds':
         print("validate_neo_addr %s and text is not /eds", text)
         return make_response('true')
 
@@ -78,10 +78,10 @@ def airdrop(self, token):
                    (('Hi, %s' % first_name) if first_name else 'Hi')) + ', '
 
     def reply(reply_content):
-        self.post_telegram(send_to,
-                           group_id,
-                           reply_content,
-                           message_id)
+        post_telegram(send_to,
+                      group_id,
+                      reply_content,
+                      message_id)
 
     check_duplicate_address = Validator.query.filter_by(neo_address=text).first()
     if check_duplicate_address:
@@ -134,7 +134,7 @@ def airdrop(self, token):
 
 
 @telegram.route('/telegrams/<string:token>', methods=['POST'])
-def telegrams(self, token):
+def telegrams(token):
     def post_telegram(url, chat_id, text, reply_to_message_id):
         r = requests.post(url,
                           headers={
@@ -188,10 +188,10 @@ def telegrams(self, token):
     code = text[1:len(text)]
 
     def reply(reply_content):
-        self.post_telegram(send_to,
-                           group_id,
-                           reply_content,
-                           message_id)
+        post_telegram(send_to,
+                      group_id,
+                      reply_content,
+                      message_id)
 
     # get bot info
     bot = Bot.query.filter_by(bot_token=token).first()
