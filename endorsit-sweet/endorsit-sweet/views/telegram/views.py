@@ -132,7 +132,7 @@ def airdrop(token):
     return make_response('true')
 
 
-@telegram.route('/airdrop/<string:token>', methods=['POST'])
+@telegram.route('/telegrams/<string:token>', methods=['POST'])
 def telegrams(token):
     def post_telegram(url, chat_id, text, reply_to_message_id):
         r = requests.post(url,
