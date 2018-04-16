@@ -42,6 +42,7 @@ def airdrop(token):
                           }).encode('utf-8'))
 
     data = get_data_from_request(request)
+    print('这里是空投', data)
     pprint(data)
     # replay telegram api
     send_to = 'https://api.telegram.org/bot%s/sendMessage' % token
