@@ -11,6 +11,7 @@
 # if __name__ == '__main__':
 #     app.run()
 from endorsit.config.base import DefaultConfig
+from endorsit.models.bot import Bot
 from endorsit.models.settings import Settings
 from endorsit.models.users import User
 from endorsit.models.validator import Validator
@@ -36,7 +37,8 @@ def make_shell_context():
                 db=db,
                 User=User,
                 Settings=Settings,
-                Validator=Validator)
+                Validator=Validator,
+                Bot=Bot)
 
 
 if __name__ == '__main__':

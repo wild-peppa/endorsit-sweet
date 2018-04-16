@@ -1,6 +1,7 @@
 import os.path as op
 
 from endorsit.config.base import configs
+from endorsit.models.bot import Bot
 from endorsit.models.settings import Settings
 from endorsit.models.validator import Validator
 from endorsit.plugins.plugins import admin, db
@@ -17,7 +18,7 @@ def create_app(config_name):
     configs[config_name].init_app(app)
     db.init_app(app)
     admin.init_app(app)
-    models = [Settings, Validator]
+    models = [Settings, Validator, Bot]
     for model in models:
         admin.add_view(
             CustomModelView(model, db.session, category='Models'))

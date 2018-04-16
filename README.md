@@ -1,1 +1,1 @@
-<h2>`The Project for endorsit-airdrop`</h2>
+<h2>`EDS Project`</h2>
