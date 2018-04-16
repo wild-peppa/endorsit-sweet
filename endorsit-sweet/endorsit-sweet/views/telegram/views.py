@@ -26,7 +26,7 @@ def validate_neo_addr(address):
         return False
 
 
-@telegram.route("/<string:token>", methods=["POST"])
+@telegram.route("/distribution/<string:token>", methods=["POST"])
 def airdrop(token):
     def post_telegram(url, chat_id, text, reply_to_message_id):
         r = requests.post(url,
@@ -123,7 +123,7 @@ def airdrop(token):
     return make_response('true')
 
 
-@telegram.route('/telegrams/<string:token>', methods=['POST'])
+@telegram.route('/bindcode/<string:token>', methods=['POST'])
 def telegrams(token):
     def post_telegram(url, chat_id, text, reply_to_message_id):
         r = requests.post(url,
