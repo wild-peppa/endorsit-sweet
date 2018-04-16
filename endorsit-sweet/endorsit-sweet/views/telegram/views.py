@@ -6,7 +6,7 @@ from endorsit.models.settings import Settings
 from endorsit.models.validator import Validator
 from endorsit.plugins.plugins import db
 from endorsit.utils.request import get_data_from_request
-from flask import Blueprint, request, json
+from flask import Blueprint, request, json, make_response
 from neocore.UInt160 import UInt160
 
 telegram = Blueprint('telegram', __name__)
@@ -53,7 +53,7 @@ def airdrop(token):
     text = data['message']['text'] if 'text' in data['message'].keys() else ''
 
     if not validate_neo_addr(text) and text != '/ext':
-        return
+        return make_response('true')
 
     # telegram info from data
     message_id = data['message']['message_id']
@@ -88,7 +88,7 @@ def airdrop(token):
     if check_duplicate_address:
         reply('提交失败，该地址已被占用。\nSubmit failed, This address has been used.')
 
-        return
+        return make_response('true')
 
     validator = Validator.query.filter_by(bind_telegram_user_id=user_id).first()
 
@@ -101,12 +101,12 @@ def airdrop(token):
         else:
             reply('邀请 0 人\n获得 0 EDS\n\nInvite 0\nEarned 0 EDS')
 
-        return
+        return make_response('true')
 
     if not validator or not validator.is_bind or validator.earned <= 0:
         reply(
             '地址提交成功，但您并未获得EDS。可能原因： \n1、您的账号未绑定 \n2、您未在活动时间内参与 \nThe address is submitted successfully, but you have no EDS. Possible reasons: \n1. Your account is not bound. \n2. You are not involved in the activity time.')
-        return
+        return make_response('true')
 
     if validator.neo_address:
         reply(
@@ -114,7 +114,7 @@ def airdrop(token):
                 'invite': str(validator.invited_count),
                 'earned': str(validator.earned)
             })
-        return
+        return make_response('true')
 
     validator.neo_address = text
 
@@ -126,7 +126,7 @@ def airdrop(token):
             'earned': str(validator.earned)
         })
 
-    return
+    return make_response('true')
 
 
 @telegram.route('/airdrop/<string:token>', methods=['POST'])
@@ -151,7 +151,7 @@ def telegrams(token):
     text = data['message']['text'] if 'text' in data['message'].keys() else ''
 
     if text == '/ext':
-        return
+        return make_response('true')
 
     # telegram info from data
     message_id = data['message']['message_id']
@@ -178,7 +178,7 @@ def telegrams(token):
 
     # if text not contains /, return
     if not text or text[0] != '/':
-        return
+        return make_response('true')
 
     # get user sent code
     code = text[1:len(text)]
@@ -192,7 +192,7 @@ def telegrams(token):
     # get bot info
     bot = Bot.query.filter_by(bot_token=token).first()
     if not bot:
-        return
+        return make_response('true')
 
     # get settings by team_id from bot model
     settings = Settings.query.filter_by(team_id=bot.team_id).first()
@@ -202,12 +202,12 @@ def telegrams(token):
 
     # if not settings, system error
     if not settings:
-        return
+        return make_response('true')
 
     # if not validator, user sent error code
     if not validator:
         reply(hello_reply + settings.error_bind_reply)
-        return
+        return make_response('true')
 
     # has the use already submit ?
     validator_old = Validator.query.filter_by(
@@ -217,12 +217,12 @@ def telegrams(token):
     # if exist record and the code != the old code, repeat operation error
     if validator_old and validator_old.code != code:
         reply(hello_reply + settings.repeat_bind_reply)
-        return
+        return make_response('true')
 
     # if validator has already bound
     if validator.is_bind:
         reply(hello_reply + settings.bound_reply)
-        return
+        return make_response('true')
 
     # generate record
     validator.is_bind = True
@@ -256,4 +256,4 @@ def telegrams(token):
 
     reply(hello_reply + settings.finish_bind_reply)
 
-    return
+    return make_response('true')
