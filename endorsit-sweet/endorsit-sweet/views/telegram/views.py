@@ -50,6 +50,7 @@ def airdrop(token):
     text = data['message']['text'] if 'text' in data['message'].keys() else ''
 
     if not validate_neo_addr(text) and text != '/eds':
+        print("validate_neo_addr %s and text is not /eds", text)
         return make_response('true')
 
     # telegram info from data
@@ -84,12 +85,15 @@ def airdrop(token):
     check_duplicate_address = Validator.query.filter_by(neo_address=text).first()
     if check_duplicate_address:
         reply('提交失败，该地址已被占用。\nSubmit failed, This address has been used.')
+        print('提交失败，该地址已被占用。\nSubmit failed, This address has been used.')
 
         return make_response('true')
 
     validator = Validator.query.filter_by(bind_telegram_user_id=user_id).first()
 
     if text == '/eds':
+        print('/eds operation')
+
         if validator and validator.is_bind and validator.earned:
             reply('邀请 %(invite)s 人\n获得 %(earned)s EDS\n\nInvite %(invite)s\nEarned %(earned)s EDS' % {
                 'invite': str(validator.invited_count),
@@ -103,6 +107,7 @@ def airdrop(token):
     if not validator or not validator.is_bind or validator.earned <= 0:
         reply(
             '地址提交成功，但您并未获得EDS。可能原因： \n1、您的账号未绑定 \n2、您未在活动时间内参与 \nThe address is submitted successfully, but you have no EDS. Possible reasons: \n1. Your account is not bound. \n2. You are not involved in the activity time.')
+        print('地址提交成功，但您并未获得EDS。可能原因： \n1、您的账号未绑定 \n2、您未在活动时间内参与 \n')
         return make_response('true')
 
     if validator.neo_address:
@@ -111,6 +116,7 @@ def airdrop(token):
                 'invite': str(validator.invited_count),
                 'earned': str(validator.earned)
             })
+        print('您已提交地址，请勿重复提交')
         return make_response('true')
 
     validator.neo_address = text
@@ -122,7 +128,7 @@ def airdrop(token):
             'invite': str(validator.invited_count),
             'earned': str(validator.earned)
         })
-
+    print('钱包地址提交成功，您获得的EDS将在7个工作日内发放。')
     return make_response('true')
 
 
@@ -140,7 +146,7 @@ def telegrams(token):
                           }).encode('utf-8'))
 
     data = get_data_from_request(request)
-
+    pprint(data)
     # replay telegram api
     send_to = 'https://api.telegram.org/bot%s/sendMessage' % token
 
