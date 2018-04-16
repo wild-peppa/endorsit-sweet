@@ -154,6 +154,7 @@ def telegrams(token):
     text = data['message']['text'] if 'text' in data['message'].keys() else ''
 
     if text == '/eds':
+
         return make_response('true')
 
     # telegram info from data
