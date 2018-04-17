@@ -116,7 +116,7 @@ def airdrop(token):
     db.session.commit()
 
     reply(
-        '钱包地址提交成功，您获得的EDS将在7个工作日内发放。 \nThe NEO address is submitted successfully, and the EDS you get will be issued within 7 working days.\n\n*******************\n\n邀请 %(invite)s 人\n获得 %(earned)s EDS\n\nInvite %(invite)s\nEarned %(earned)s EDS' % {
+        '钱包地址提交成功，您获得的EDS将在20个工作日内发放。 \nThe NEO address is submitted successfully, and the EDS you get will be issued within 20 working days.\n\n*******************\n\n邀请 %(invite)s 人\n获得 %(earned)s EDS\n\nInvite %(invite)s\nEarned %(earned)s EDS' % {
             'invite': str(validator.invited_count),
             'earned': str(validator.earned)
         })
