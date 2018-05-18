@@ -32,8 +32,8 @@ class Validator(db.Model):
     neo_address = db.Column(db.String(100), default='')
     is_exported = db.Column(db.Boolean, default=False)
 
-    create_at = db.Column(db.DateTime, default=datetime.now(), nullable=False)
-    update_at = db.Column(db.DateTime, default=datetime.now(), nullable=False)
+    create_at = db.Column(db.DateTime, nullable=False)
+    update_at = db.Column(db.DateTime, nullable=False)
     __tablename__ = 'validator'
 
     def __init__(self,
@@ -53,7 +53,9 @@ class Validator(db.Model):
                  invited_code='',
                  invited_count=0,
                  neo_address='',
-                 is_exported=False):
+                 is_exported=False,
+                 create_at='',
+                 update_at=''):
         self.team_id = team_id
         self.settings_id = settings_id
         self.input_content = input_content
@@ -71,6 +73,8 @@ class Validator(db.Model):
         self.invited_count = invited_count
         self.neo_address = neo_address
         self.is_exported = is_exported
+        self.create_at = create_at
+        self.update_at = update_at
 
 
 class ValidatorSchema(ma.ModelSchema):

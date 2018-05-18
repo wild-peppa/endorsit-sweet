@@ -1,3 +1,4 @@
+import datetime
 import random
 
 from endorsit.exceptions.custom_error import ServiceError
@@ -45,7 +46,9 @@ def code():
             team_id=int(data['team_id']),
             settings_id=int(data['settings_id']),
             input_content=data['input_content'],
-            code=new_code
+            code=new_code,
+            create_at=datetime.datetime.now(),
+            update_at=datetime.datetime.now()
         )
     except Exception:
         raise ServiceError(100001)

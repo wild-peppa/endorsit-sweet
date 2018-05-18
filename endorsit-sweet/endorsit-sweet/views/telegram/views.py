@@ -1,3 +1,5 @@
+import datetime
+
 import requests
 from base58 import b58decode
 from eggit.string import DateTimeUtils
@@ -112,7 +114,7 @@ def airdrop(token):
         return make_response('true')
 
     validator.neo_address = text
-
+    validator.update_at = datetime.datetime.now()
     db.session.commit()
 
     reply(
@@ -225,7 +227,7 @@ def telegrams(token):
     validator.bind_telegram_user = username if username else first_name
     validator.bind_telegram_group_id = group_id
     validator.bind_telegram_group = group_title
-
+    validator.update_at = datetime.datetime.now()
     if not settings.is_ended:
         validator.earned = settings.init_earn
 
@@ -244,6 +246,7 @@ def telegrams(token):
                     from_validator.earned += settings.invite_earn
                 else:
                     from_validator.earned = settings.limit_earn
+        from_validator.update_at = datetime.datetime.now()
 
     db.session.commit()
 
